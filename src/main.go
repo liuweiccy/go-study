@@ -9,7 +9,7 @@ import (
 func main()  {
 	hello.Name()
 
-	fmt.Println("Hello:", 23, 45)
+	fmt.Println("Hello:", 23, "\n", 45)
 
 	fmt.Println(trans.Pi)
 }
