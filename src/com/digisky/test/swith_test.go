@@ -68,3 +68,15 @@ func f(from string) {
 		fmt.Println(from, ":", i)
 	}
 }
+
+func TestChannel(t *testing.T)  {
+	s := time.Now()
+	message := make(chan string)
+
+	go func() {message <- "ping"}()
+
+	msg := <-message
+
+	fmt.Println("耗时：", (time.Now()).Sub(s))
+	fmt.Println(msg)
+}
