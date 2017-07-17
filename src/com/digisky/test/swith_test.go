@@ -112,3 +112,39 @@ func TestFvp(t *testing.T)  {
 	fp(&ar)
 	fv(ar)
 }
+
+func TestSlice(t *testing.T)  {
+	var arr1 [6]int
+	var slice1 []int = arr1[2:5]
+
+	for i:=0;i<len(arr1);i++ {
+		arr1[i] = i*2
+	}
+
+	for i:=0; i<len(slice1); i++ {
+		fmt.Printf("Slice at %d is %d\n", i, slice1[i])
+	}
+
+	fmt.Println("arr1 length:", len(arr1))
+	fmt.Println("slice1 length:", len(slice1))
+	fmt.Println("slice1 cap length:", cap(slice1))
+
+	slice1 = slice1[0:4]
+
+	for i:=0; i<len(slice1); i++ {
+		fmt.Printf("slice at %d is %d\n", i, slice1[i])
+	}
+
+	fmt.Println("slice1 length:", len(slice1))
+	fmt.Println("slice1 cap length:", cap(slice1))
+
+	fmt.Println(sum(arr1[:]))
+}
+
+func sum(a []int) int {
+	s := 0
+	for i:=0; i<len(a); i++ {
+		s += a[i]
+	}
+	return s
+}
