@@ -1,12 +1,12 @@
 package test
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 	"time"
 )
 
-func TestSwitch(t *testing.T)  {
+func TestSwitch(t *testing.T) {
 	i := 2
 	fmt.Print("Write", i, " as ")
 	switch i {
@@ -49,7 +49,7 @@ func TestSwitch(t *testing.T)  {
 	whatAmI("hey")
 }
 
-func TestGoRoutine(t *testing.T)  {
+func TestGoRoutine(t *testing.T) {
 	f("direct")
 
 	go f("goroutine")
@@ -69,11 +69,11 @@ func f(from string) {
 	}
 }
 
-func TestChannel(t *testing.T)  {
+func TestChannel(t *testing.T) {
 	s := time.Now()
 	message := make(chan string)
 
-	go func() {message <- "ping"}()
+	go func() { message <- "ping" }()
 
 	msg := <-message
 
@@ -81,14 +81,14 @@ func TestChannel(t *testing.T)  {
 	fmt.Println(msg)
 }
 
-func TestArray(t *testing.T)  {
-	var arr1[5] int
+func TestArray(t *testing.T) {
+	var arr1 [5]int
 
-	for i:=0;i<len(arr1);i++ {
-		arr1[i] = i*2
+	for i := 0; i < len(arr1); i++ {
+		arr1[i] = i * 2
 	}
 
-	for i:=0; i<len(arr1); i++ {
+	for i := 0; i < len(arr1); i++ {
 		fmt.Println(arr1[i])
 	}
 
@@ -98,30 +98,30 @@ func TestArray(t *testing.T)  {
 	}
 }
 
-func fv(a [3]int)  {
+func fv(a [3]int) {
 	fmt.Println(a)
 }
 
-func fp(a *[3]int)  {
+func fp(a *[3]int) {
 	a[2] = a[2] * 2
 	fmt.Println(a)
 }
 
-func TestFvp(t *testing.T)  {
-	var ar = [3]int{1,2,3}
+func TestFvp(t *testing.T) {
+	var ar = [3]int{1, 2, 3}
 	fp(&ar)
 	fv(ar)
 }
 
-func TestSlice(t *testing.T)  {
+func TestSlice(t *testing.T) {
 	var arr1 [6]int
 	var slice1 []int = arr1[2:5]
 
-	for i:=0;i<len(arr1);i++ {
-		arr1[i] = i*2
+	for i := 0; i < len(arr1); i++ {
+		arr1[i] = i * 2
 	}
 
-	for i:=0; i<len(slice1); i++ {
+	for i := 0; i < len(slice1); i++ {
 		fmt.Printf("Slice at %d is %d\n", i, slice1[i])
 	}
 
@@ -131,7 +131,7 @@ func TestSlice(t *testing.T)  {
 
 	slice1 = slice1[0:4]
 
-	for i:=0; i<len(slice1); i++ {
+	for i := 0; i < len(slice1); i++ {
 		fmt.Printf("slice at %d is %d\n", i, slice1[i])
 	}
 
@@ -143,8 +143,70 @@ func TestSlice(t *testing.T)  {
 
 func sum(a []int) int {
 	s := 0
-	for i:=0; i<len(a); i++ {
+	for i := 0; i < len(a); i++ {
 		s += a[i]
 	}
 	return s
+}
+
+func TestRang(t *testing.T) {
+	seasons := []string{"Spring", "Summer", "Autumn", "Winter"}
+
+	for ix, season := range seasons {
+		fmt.Printf("Season %d is %s \n", ix, season)
+	}
+
+	var season string
+	for _, season = range seasons {
+		fmt.Println(season)
+	}
+
+	for ix := range seasons {
+		fmt.Println(ix)
+	}
+}
+
+func TestReslice(t *testing.T) {
+	slice1 := make([]int, 0, 10)
+	for i := 0; i < cap(slice1); i++ {
+		slice1 = slice1[0 : i+1]
+		slice1[i] = i
+		fmt.Println("slice1 len:", len(slice1))
+	}
+
+	for i := 0; i < len(slice1); i++ {
+		fmt.Printf("slice at %d is %d\n", i, slice1[i])
+	}
+}
+
+func TestCopyAppendSlice(t *testing.T) {
+	s1_from := []int{1, 2, 3}
+	s1_to := make([]int, 10)
+	n := copy(s1_to, s1_from)
+	fmt.Println(s1_to)
+	fmt.Println("copy len：", n)
+
+	sl3 := []int{1, 2, 3}
+	sl3 = append(sl3, 4, 5, 6)
+	fmt.Println(sl3)
+
+	fmt.Println(compare([]byte("ssss"),[]byte("2222222222")))
+}
+
+func compare(a, b []byte) int {
+	for i := 0; i < len(a) && i < len(b); i++ {
+		switch {
+		case a[i] > b[i]:
+			return 1
+		case a[i] < b[i]:
+			return -1
+		}
+	}
+	switch {
+	case len(a) > len(b):
+		return 1
+	case len(a) < len(b):
+		return -1
+	}
+	return 0
 }
