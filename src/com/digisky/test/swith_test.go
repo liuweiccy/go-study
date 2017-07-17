@@ -80,3 +80,35 @@ func TestChannel(t *testing.T)  {
 	fmt.Println("耗时：", (time.Now()).Sub(s))
 	fmt.Println(msg)
 }
+
+func TestArray(t *testing.T)  {
+	var arr1[5] int
+
+	for i:=0;i<len(arr1);i++ {
+		arr1[i] = i*2
+	}
+
+	for i:=0; i<len(arr1); i++ {
+		fmt.Println(arr1[i])
+	}
+
+	a := [...]string{"a", "b", "c", "d"}
+	for i := range a {
+		fmt.Println("Array item", i, "is", a[i])
+	}
+}
+
+func fv(a [3]int)  {
+	fmt.Println(a)
+}
+
+func fp(a *[3]int)  {
+	a[2] = a[2] * 2
+	fmt.Println(a)
+}
+
+func TestFvp(t *testing.T)  {
+	var ar = [3]int{1,2,3}
+	fp(&ar)
+	fv(ar)
+}
