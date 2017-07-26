@@ -53,6 +53,10 @@ func (c *car) getValue() float32 {
 	return c.price
 }
 
+func (c *car) Namer() string {
+	return c.make
+}
+
 type valueable interface {
 	getValue() float32
 }
@@ -66,4 +70,76 @@ func TestI2(t *testing.T) {
 	v2 := valueable(&car{"JiLi", "low", 120000})
 	showValue(v1)
 	showValue(v2)
+}
+
+func TestI3(t *testing.T) {
+	var areaIntf Shaper
+	sq1 := new(Square)
+	sq1.side = 5
+	sq1.name = "VV"
+
+	areaIntf = sq1
+
+	if t, ok := areaIntf.(*Square); ok {
+		fmt.Println(t)
+	}
+
+	if u, ok := areaIntf.(*Square); ok {
+		fmt.Println(u)
+	} else {
+		fmt.Println("Error")
+	}
+}
+
+func TestI4(t *testing.T) {
+	var areaIntf Shaper
+	sq1 := new(Square)
+	sq1.side = 5
+	sq1.name = "VV"
+
+	areaIntf = sq1
+	switch t := areaIntf.(type) {
+	case *Square:
+		fmt.Println("square", t)
+	case *car:
+		fmt.Println("car", t)
+	default:
+		fmt.Println("unkown")
+	}
+}
+
+type Stringer interface {
+	String() string
+}
+
+type S1 struct {
+	name string
+}
+
+func (s *S1) String() string {
+	return s.name
+}
+
+type S2 struct {
+	name string
+}
+
+func (s *S2) String2() string {
+	return s.name
+}
+
+func TestI5(t *testing.T) {
+	s1 := new(S1)
+	s2 := new(S2)
+
+	s1.name = "VV"
+	s2.name = "CCY"
+
+	var v Stringer
+
+	v = s1
+
+	if sv, ok := v.(Stringer); ok {
+		fmt.Println("s1 is Stringer", sv)
+	}
 }
