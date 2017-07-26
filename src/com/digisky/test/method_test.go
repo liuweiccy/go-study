@@ -68,7 +68,7 @@ func TestMethod3(t *testing.T) {
 
 type List []int
 
-func (l List) len() int {
+func (l List) Len() int {
 	return len(l)
 }
 
@@ -79,11 +79,11 @@ func (l *List) Append(val int) {
 func TestMethod4(t *testing.T) {
 	var lst List
 	lst.Append(1)
-	fmt.Println(lst, lst.len())
+	fmt.Println(lst, lst.Len())
 
 	plst := new(List)
 	plst.Append(2)
-	fmt.Println(plst, plst.len())
+	fmt.Println(plst, plst.Len())
 }
 
 type Point struct {
