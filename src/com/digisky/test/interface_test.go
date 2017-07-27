@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"testing"
+	"reflect"
 )
 
 type Shaper interface {
@@ -148,8 +149,8 @@ type Appender interface {
 	Append(int)
 }
 
-func CountInto(a Appender, start, end int)  {
-	for i:=start;i<=end;i++ {
+func CountInto(a Appender, start, end int) {
+	for i := start; i <= end; i++ {
 		a.Append(i)
 	}
 }
@@ -162,7 +163,7 @@ func LongEnough(lener Lener) bool {
 	return lener.Len()*10 > 42
 }
 
-func TestI6(t *testing.T)  {
+func TestI6(t *testing.T) {
 	var list List
 	//CountInto(list, 1, 10)
 	if LongEnough(list) {
@@ -175,4 +176,51 @@ func TestI6(t *testing.T)  {
 	if LongEnough(plist) {
 		fmt.Println("plist is long enough!")
 	}
+}
+
+type Sorter interface {
+	Len() int
+	Less(i, j int) bool
+	Swap(i, j int)
+}
+
+type IntArray []int
+
+func (p IntArray) Len() int {
+	return len(p)
+}
+
+func (p IntArray) Less(i, j int) bool {
+	return p[i] < p[j]
+}
+
+func (p IntArray) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
+}
+
+func Sort(data Sorter) {
+	for pass := 1; pass < data.Len(); pass++ {
+		for i := 0; i < data.Len()-pass; i++ {
+			if data.Less(i+1, i) {
+				data.Swap(i, i+1)
+			}
+		}
+	}
+}
+
+func TestI7(t *testing.T) {
+	data := IntArray{74, 59, 238, -748, 9845, 0, 0, 42}
+	sorter := Sorter(data)
+	Sort(sorter)
+	fmt.Println(data)
+}
+
+func TestI8(t *testing.T)  {
+	var x float64 = 34.23
+	fmt.Println(reflect.TypeOf(x))
+	fmt.Println(reflect.ValueOf(x))
+}
+
+func TestI9(t *testing.T)  {
+
 }
