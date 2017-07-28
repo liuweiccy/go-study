@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
-	"testing"
 	"reflect"
+	"testing"
 )
 
 type Shaper interface {
@@ -215,12 +215,78 @@ func TestI7(t *testing.T) {
 	fmt.Println(data)
 }
 
-func TestI8(t *testing.T)  {
+func TestI8(t *testing.T) {
 	var x float64 = 34.23
 	fmt.Println(reflect.TypeOf(x))
 	fmt.Println(reflect.ValueOf(x))
 }
 
-func TestI9(t *testing.T)  {
+func TestI9(t *testing.T) {
+	var x float64 = 3.4
+	fmt.Println("type:", reflect.TypeOf(x))
+	v := reflect.ValueOf(x)
+	fmt.Println("value:", v)
+	fmt.Println("v.type:", v.Type())
+	fmt.Println("v.kind:", v.Kind())
+	fmt.Println("v.Float:", v.Float())
+	fmt.Println(v.Interface())
+	y := v.Interface().(float64)
+	fmt.Println("y:", y)
+	fmt.Println("y.type:", reflect.TypeOf(y))
+}
 
+func TestI10(t *testing.T) {
+	var x float64 = 3.4
+	v := reflect.ValueOf(x)
+	fmt.Println("type of v:", v.Type())
+	fmt.Println("setability of v:", v.CanSet())
+	v = reflect.ValueOf(&x)
+	fmt.Println("type of v:", v.Type())
+	fmt.Println("setability of v:", v.CanSet())
+
+	v = v.Elem()
+	fmt.Println("The Elem of v is:", v)
+	fmt.Println("setability of v:", v.CanSet())
+	v.SetFloat(3.45)
+	fmt.Println(v.Interface())
+	fmt.Println(v)
+}
+
+type NotKnowType struct {
+	s1, s2, s3 string
+}
+
+func (n NotKnowType) String() string {
+	return n.s1 + "." + n.s2 + "." + n.s3
+}
+
+func TestI11(t *testing.T) {
+	var secret interface{} = NotKnowType{"VV", "YY", "BB"}
+	value := reflect.ValueOf(secret)
+	fmt.Println("type:", value.Type())
+	fmt.Println("kind:", value.Kind())
+
+	for i := 0; i < value.NumField(); i++ {
+		fmt.Println(value.Field(i))
+	}
+	results := value.Method(0).Call(nil)
+	fmt.Println(results)
+}
+
+type Ts struct {
+	A int
+	B string
+}
+
+func TestI12(t1 *testing.T) {
+	t := Ts{23, "VV"}
+	s := reflect.ValueOf(&t).Elem()
+	typeOfT := s.Type()
+	for i := 0; i < s.NumField(); i++ {
+		f := s.Field(i)
+		fmt.Println(i," ", typeOfT.Field(i).Name, " ", f.Type(), " ", f.Interface())
+	}
+	s.Field(0).SetInt(21)
+	s.Field(1).SetString("YY")
+	fmt.Println(s)
 }
