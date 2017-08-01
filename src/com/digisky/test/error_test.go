@@ -11,6 +11,13 @@ import (
 
 var errNotFound error = errors.New("Not found error!")
 
+func Sqrt(f float64)(float64, error){
+	if f < 0 {
+		return 0, errors.New("Math - square root of negative number")
+	}
+	return f*f, nil
+}
+
 func TestErr1(t *testing.T) {
 	fmt.Println(errNotFound)
 }
