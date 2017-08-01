@@ -106,3 +106,23 @@ func TestGo7(t *testing.T)  {
 	stream := pump2()
 	go suck(stream)
 }
+
+func source(ch chan <- int)  {
+	for {
+		ch <- 1
+	}
+}
+
+func sink(ch <- chan int)  {
+	for {
+		fmt.Println(<-ch)
+	}
+}
+
+func TestGo8(t *testing.T)  {
+	var c = make(chan int)
+	defer close(c)
+	go source(c)
+	go sink(c)
+	time.Sleep(1)
+}
