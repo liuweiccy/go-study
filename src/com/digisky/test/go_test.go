@@ -126,3 +126,28 @@ func TestGo8(t *testing.T)  {
 	go sink(c)
 	time.Sleep(1)
 }
+
+func TestGo9(t *testing.T)  {
+	sendChan := make(chan int)
+	recvChan := make(chan string)
+	go processChan(sendChan, recvChan)
+	go func() {
+		for i:=0;i<10;i++ {
+			sendChan <- i
+		}
+	}()
+	go func() {
+		for {
+			fmt.Println("收到值", <-recvChan)
+		}
+	}()
+	time.Sleep(1e4)
+}
+
+func processChan(in <- chan int, out chan <- string)  {
+	for inValue := range in {
+		fmt.Println(inValue)
+		result := "OK"
+		out <- result
+	}
+}
