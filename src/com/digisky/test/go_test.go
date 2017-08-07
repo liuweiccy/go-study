@@ -102,24 +102,24 @@ func pump2() chan int {
 	return ch
 }
 
-func TestGo7(t *testing.T)  {
+func TestGo7(t *testing.T) {
 	stream := pump2()
 	go suck(stream)
 }
 
-func source(ch chan <- int)  {
+func source(ch chan<- int) {
 	for {
 		ch <- 1
 	}
 }
 
-func sink(ch <- chan int)  {
+func sink(ch <-chan int) {
 	for {
 		fmt.Println(<-ch)
 	}
 }
 
-func TestGo8(t *testing.T)  {
+func TestGo8(t *testing.T) {
 	var c = make(chan int)
 	defer close(c)
 	go source(c)
@@ -127,7 +127,35 @@ func TestGo8(t *testing.T)  {
 	time.Sleep(1)
 }
 
-func TestGo9(t *testing.T)  {
+func TestGo9(t *testing.T) {
+	ch := make(chan int)
+	go generate(ch)
+	time.Sleep(1)
+	for {
+		prime := <-ch
+		fmt.Println(prime, " ")
+		ch1 := make(chan int)
+		go filter(ch, ch, prime)
+		ch = ch1
+	}
+}
+
+func generate(ch chan int) {
+	for i := 2; ; i++ {
+		ch <- i
+	}
+}
+
+func filter(in, out chan int, prime int) {
+	for {
+		i := <-in
+		if i%prime != 0 {
+			out <- i
+		}
+	}
+}
+
+func TestGo10(t *testing.T)  {
 	sendChan := make(chan int)
 	recvChan := make(chan string)
 	go processChan(sendChan, recvChan)
@@ -151,3 +179,4 @@ func processChan(in <- chan int, out chan <- string)  {
 		out <- result
 	}
 }
+
