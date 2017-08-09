@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"testing"
 	"time"
+	"net"
 )
 
 func TestGo1(t *testing.T) {
