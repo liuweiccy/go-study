@@ -155,12 +155,12 @@ func filter(in, out chan int, prime int) {
 	}
 }
 
-func TestGo10(t *testing.T)  {
+func TestGo10(t *testing.T) {
 	sendChan := make(chan int)
 	recvChan := make(chan string)
 	go processChan(sendChan, recvChan)
 	go func() {
-		for i:=0;i<10;i++ {
+		for i := 0; i < 10; i++ {
 			sendChan <- i
 		}
 	}()
@@ -172,7 +172,7 @@ func TestGo10(t *testing.T)  {
 	time.Sleep(1e4)
 }
 
-func processChan(in <- chan int, out chan <- string)  {
+func processChan(in <-chan int, out chan<- string) {
 	for inValue := range in {
 		fmt.Println(inValue)
 		result := "OK"
@@ -180,3 +180,82 @@ func processChan(in <- chan int, out chan <- string)  {
 	}
 }
 
+//14.9
+func TestGo11(t *testing.T) {
+	ch := make(chan string)
+	go sendData1(ch)
+	getData1(ch)
+}
+
+func sendData1(ch chan string) {
+	ch <- "Beijing"
+	ch <- "ShangHai"
+	ch <- "ChengDu"
+	ch <- "ShenZhen"
+	ch <- "ChongQing"
+	close(ch)
+}
+
+func getData1(ch chan string) {
+	for {
+		input, open := <-ch
+		if !open {
+			fmt.Println("通道已经关闭...")
+			break
+		}
+		fmt.Println(input)
+	}
+}
+
+// 14.10
+func TestG12(t *testing.T) {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+	go pump1(ch1)
+	go pump3(ch2)
+	go suck1(ch1, ch2)
+	time.Sleep(1)
+}
+
+func pump1(ch chan int) {
+	for i := 0; ; i++ {
+		ch <- i * 2
+	}
+}
+
+func pump3(ch chan int) {
+	for i := 0; ; i++ {
+		ch <- i + 5
+	}
+}
+
+func suck1(ch1, ch2 chan int) {
+	for {
+		select {
+		case v := <-ch1:
+			fmt.Println("接受到来自channel—1的值：", v)
+			break
+		case v := <-ch2:
+			fmt.Println("接受到来自channel—2的值：", v)
+			break
+		}
+	}
+}
+
+func TestGo13(t *testing.T)  {
+	tick := time.Tick(1e8)
+	boom := time.After(5e8)
+
+	for {
+		select {
+		case <- tick:
+			fmt.Println("tick.")
+		case <- boom:
+			fmt.Println("BOOM!")
+			return
+		default:
+			fmt.Println("	.")
+			time.Sleep(5e7)
+		}
+	}
+}
