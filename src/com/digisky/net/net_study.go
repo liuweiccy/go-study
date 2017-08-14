@@ -15,6 +15,7 @@ func Server() {
 		fmt.Println("Error listening", err.Error())
 		return
 	}
+	
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
