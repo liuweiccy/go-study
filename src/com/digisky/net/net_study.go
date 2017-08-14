@@ -6,10 +6,9 @@ import (
 	"net"
 	"os"
 	"strings"
-	"testing"
 )
 
-func TestNet1(t *testing.T) {
+func Server() {
 	fmt.Println("Starting the server ...")
 	listener, err := net.Listen("tcp", "localhost:50010")
 	if err != nil {

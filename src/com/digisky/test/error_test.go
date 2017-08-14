@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 )
 
 var errNotFound error = errors.New("Not found error!")
@@ -58,15 +59,15 @@ func (e *ParseError) String() string {
 }
 
 func Parse(input string) (numbers []int, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				err = fmt.Errorf("Err -- pkg:%v", r)
-			}
-		}
-	}()
+	//defer func() {
+	//	if r := recover(); r != nil {
+	//		var ok bool
+	//		err, ok = r.(error)
+	//		if !ok {
+	//			err = fmt.Errorf("Err -- pkg:%v", r)
+	//		}
+	//	}
+	//}()
 	fields := strings.Fields(input)
 	numbers = field2numbers(fields)
 	return
@@ -87,18 +88,30 @@ func field2numbers(fileds []string) (numbers []int) {
 
 func TestErr4(t *testing.T) {
 	var examples = []string{
-		"1 2 3 4 5",
 		"100 50 25 12.5 6.25",
-		"2 + 2 = 4",
+		//"1 2 3 4 5",
 		"1st class",
+		//"1 2 3 4 5",
 		"",
 	}
 	for _, ex := range examples {
-		fmt.Printf("Parsing %q:\n", ex)
-		nums, err := Parse(ex)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(nums)
+		time.Sleep(1e8)
+		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					var ok bool
+					if !ok {
+						fmt.Errorf("Err -- pkg:%v", r)
+					}
+				}
+			}()
+			//fmt.Printf("Parsing %q:\n", ex)
+			nums, err := Parse(ex)
+			if err != nil {
+				fmt.Println("失败：",err)
+			}
+			fmt.Println("成功：",nums)
+		}()
 	}
+	time.Sleep(1e9)
 }
